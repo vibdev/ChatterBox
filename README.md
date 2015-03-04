@@ -7,11 +7,9 @@ A nifty chat app based on socket.io with a sprinkle of machine learning
     
     $ node master-chat.js
 
-- Open the index file in your browser
-- Start Chatting :)
-
-##Start python
-
-- Start node server
+- Start python server
     
     $ python mod.py 127.0.0.1:8080
+
+- Open the index file in your browser
+- Start Chatting :)
