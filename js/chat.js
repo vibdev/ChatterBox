@@ -120,20 +120,27 @@ $(function() {
     if ($el.hasClass('message')) {
       var $messageObj = $el.find('.messageBody');
       var theMessage = $messageObj.text();
-      var messageIsFine = true;
 
-      // Dummy Mod Code
-      if (theMessage.indexOf("fun") !== -1) {
-        messageIsFine = false;
-      }
+      $.ajax({
+        type: 'POST',
+        url: 'http://127.0.0.1:8080/mod',
+        data: { message: theMessage }
+      }).done(function( data ) {
+          modData = JSON.parse(data);
+          if (modData.action !== 'none') {
 
-      if (!messageIsFine) {
-        $messageObj.html('<span class="deleted">~Message Deleted~');
-        $el.after('<li class="message" style="display: list-item;"><span class="username" style="color: red;">Billy Bot</span><span class="messageBody">NO FUN</span></li>')
-      }
+            // Proably repalce this with a callback function
+            if (modData.action == 'delete') {
+              $messageObj.html('<span class="deleted">~Message Deleted~');
+              $el.after('<li class="message"><span class="username" style="color: red;">Billy Bot</span><span class="messageBody">' + modData.message + '</span></li>');
+            }
 
-      // Scroll message area
-      $messages[0].scrollTop = $messages[0].scrollHeight;
+            // Scroll message area
+            $messages[0].scrollTop = $messages[0].scrollHeight;
+
+          }
+      });
+
     }
   }
 

@@ -9,3 +9,9 @@ A nifty chat app based on socket.io with a sprinkle of machine learning
 
 - Open the index file in your browser
 - Start Chatting :)
+
+##Start python
+
+- Start node server
+    
+    $ python mod.py 127.0.0.1:8080
