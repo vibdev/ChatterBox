@@ -115,6 +115,28 @@ $(function() {
     });
   }
 
+  // TODO: This function would make an ajax call to a phython script and return a JSON responce with if the message should be deleted, why, and any additional action (timeout, purgechat history, ban), etc.
+  function modChat($el) {
+    if ($el.hasClass('message')) {
+      var $messageObj = $el.find('.messageBody');
+      var theMessage = $messageObj.text();
+      var messageIsFine = true;
+
+      // Dummy Mod Code
+      if (theMessage.indexOf("fun") !== -1) {
+        messageIsFine = false;
+      }
+
+      if (!messageIsFine) {
+        $messageObj.html('<span class="deleted">~Message Deleted~');
+        $el.after('<li class="message" style="display: list-item;"><span class="username" style="color: red;">Billy Bot</span><span class="messageBody">NO FUN</span></li>')
+      }
+
+      // Scroll message area
+      $messages[0].scrollTop = $messages[0].scrollHeight;
+    }
+  }
+
   // Adds a message element to the messages and scrolls to the bottom
   // el - The element to add as a message
   // options.fade - If the element should fade-in (default = true)
@@ -144,6 +166,8 @@ $(function() {
       $messages.append($el);
     }
     $messages[0].scrollTop = $messages[0].scrollHeight;
+
+    modChat($el);
   }
 
   // Prevents input from having injected markup
@@ -277,61 +301,3 @@ $(function() {
     removeChatTyping(data);
   });
 });
-
-/* You Tube Player API Functions */
-
-// This function creates an <iframe> after the API code downloads.
-function onYouTubeIframeAPIReady() {
-	console.log('api ready');
-    player = new YT.Player('player', {
-      height: '463',
-      width: '823',
-      playerVars: {
-        controls       : 0,
-        modestbranding : 1,
-        showinfo       : 0,
-        loop           : 1,
-        disablekb      : 1,
-        iv_load_policy : 3,
-        theme          : 'light'
-      },
-      events: {
-        'onReady': onPlayerReady,
-        'onStateChange': onPlayerStateChange
-      }
-    });
-}
-
-// The API will call this function when the video player is ready.
-function onPlayerReady(event) {
-    // TODO change to player.loadPlaylist to auto start
-    // TODO make index and startSeconds dynamic
-    player.cuePlaylist({
-        list        : 'PLl4CmnQ2VIyd0TjnXnbpcW4jmHKPPD0rh',
-        listType    : 'playlist',
-        index       : 2,
-        startSeconds: 0
-    });
-}
-
-// The API calls this function when the player's state changes.
-function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.PLAYING) {
-        updateStats();
-    }
-    if (event.data == YT.PlayerState.PAUSED) {
-        // Prevent pausing on click
-        playVideo();
-    }
-}
-function playVideo() {
-    player.playVideo();
-}
-function updateStats() {
-    $('.video-number').text('playlist video number: ' + player.getPlaylistIndex());
-    $('.video-length').text('current video length: ' + player.getDuration());
-    $('.video-url').text('current video url: ' + player.getVideoUrl());
-}
-function youtubeVolume(newVolume) {
-    player.setVolume(newVolume);
-}
